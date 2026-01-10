@@ -1,82 +1,174 @@
-'use client'
+/* eslint-disable react-hooks/exhaustive-deps */
+"use client";
 
-import { useState, useEffect, useCallback } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import Image from 'next/image'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
+import { AnimatePresence } from "motion/react";
+import * as motion from "motion/react-m"
+import Image from "next/image";
+import { useEffect, useState } from "react";
 
-export interface Testimonial {
-  quote: string
-  name: string
-  designation: string
-  src: string
-}
+type Testimonial = {
+  quote: string;
+  name: string;
+  designation: string;
+  src: string;
+};
+export const AnimatedTestimonials = ({
+  testimonials,
+  autoplay = false,
+}: {
+  testimonials: Testimonial[];
+  autoplay?: boolean;
+}) => {
+  const [active, setActive] = useState(0);
 
-export function AnimatedTestimonials({ testimonials, autoplay = false }: { testimonials: Testimonial[]; autoplay?: boolean }) {
-  const [active, setActive] = useState(0)
+  const handleNext = () => {
+    setActive((prev) => (prev + 1) % testimonials.length);
+  };
 
-  const next = useCallback(() => setActive(p => (p + 1) % testimonials.length), [testimonials.length])
-  const prev = () => setActive(p => (p - 1 + testimonials.length) % testimonials.length)
+  const handlePrev = () => {
+    setActive((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+  };
+
+  const isActive = (index: number) => {
+    return index === active;
+  };
 
   useEffect(() => {
-    if (!autoplay) return
-    const id = setInterval(next, 5000)
-    return () => clearInterval(id)
-  }, [autoplay, next])
+    if (autoplay) {
+      const interval = setInterval(handleNext, 5000);
+      return () => clearInterval(interval);
+    }
+  }, [autoplay]);
 
-  const isActive = (idx: number) => idx === active
-
+  const randomRotateY = () => {
+    return Math.floor(Math.random() * 21) - 10;
+  };
   return (
-    <div className="max-w-sm md:max-w-4xl mx-auto px-4 py-20 font-sans">
-      <div className="relative grid grid-cols-1 md:grid-cols-2 gap-20">
-        {/* Images */}
-        <div className="relative h-80">
-          <AnimatePresence>
-            {testimonials.map((t, idx) => (
-              <motion.div
-                key={t.src}
-                initial={{ opacity: 0, scale: 0.9, z: -100, rotate: Math.random() * 21 - 10 }}
-                animate={{ opacity: isActive(idx) ? 1 : 0.7, scale: isActive(idx) ? 1 : 0.95, z: isActive(idx) ? 0 : -100, rotate: isActive(idx) ? 0 : Math.random() * 21 - 10, zIndex: isActive(idx) ? 10 : testimonials.length - idx, y: isActive(idx) ? [0, -80, 0] : 0 }}
-                exit={{ opacity: 0, scale: 0.9, z: 100 }}
-                transition={{ duration: 0.4, ease: 'easeInOut' }}
-                className="absolute inset-0 origin-bottom"
-              >
-                <Image src={t.src} alt={t.name} width={500} height={500} draggable={false} className="h-full w-full rounded-3xl object-cover object-center" />
-              </motion.div>
-            ))}
-          </AnimatePresence>
+    <div className="mx-auto max-w-sm px-4 py-10 font-sans antialiased md:max-w-4xl md:px-8 lg:px-12" suppressHydrationWarning>
+      <div className="relative grid grid-cols-1 gap-20 md:grid-cols-2">
+        <div>
+          <div className="relative h-60 md:h-80 w-full">
+            <AnimatePresence>
+              {testimonials.map((testimonial, index) => (
+                <motion.div
+                  suppressHydrationWarning
+                  key={testimonial.src}
+                  initial={{
+                    opacity: 0,
+                    scale: 0.9,
+                    z: -100,
+                    rotate: randomRotateY(),
+                  }}
+                  animate={{
+                    opacity: isActive(index) ? 1 : 0.7,
+                    scale: isActive(index) ? 1 : 0.95,
+                    z: isActive(index) ? 0 : -100,
+                    rotate: isActive(index) ? 0 : randomRotateY(),
+                    zIndex: isActive(index)
+                      ? 40
+                      : testimonials.length + 2 - index,
+                    y: isActive(index) ? [0, -80, 0] : 0,
+                  }}
+                  exit={{
+                    opacity: 0,
+                    scale: 0.9,
+                    z: 100,
+                    rotate: randomRotateY(),
+                  }}
+                  transition={{
+                    duration: 0.4,
+                    ease: "easeInOut",
+                  }}
+                  className="absolute inset-0 origin-bottom"
+                >
+                  <Image
+                    src={testimonial.src}
+                    alt={testimonial.name}
+                    width={500}
+                    height={500}
+                    draggable={false}
+                    className="h-full w-full rounded-3xl object-cover object-center"
+                  />
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </div>
         </div>
 
-        {/* Text */}
-        <div className="flex justify-between flex-col py-4 text-start">
+        <div className="flex flex-col items-center justify-center gap-10">
           <motion.div
             key={active}
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: -20, opacity: 0 }}
-            transition={{ duration: 0.2, ease: 'easeInOut' }}
+            initial={{
+              y: 20,
+              opacity: 0,
+            }}
+            animate={{
+              y: 0,
+              opacity: 1,
+            }}
+            exit={{
+              y: -20,
+              opacity: 0,
+            }}
+            transition={{
+              duration: 0.2,
+              ease: "easeInOut",
+            }}
           >
-            <h3 className="text-2xl font-bold text-black">{testimonials[active].name}</h3>
-            <p className="text-sm text-foreground">{testimonials[active].designation}</p>
-            <motion.p className="text-lg text-foreground mt-8">
-              {testimonials[active].quote.split(' ').map((word, i) => (
-                <motion.span key={i} initial={{ filter: 'blur(10px)', opacity: 0, y: 5 }} animate={{ filter: 'blur(0px)', opacity: 1, y: 0 }} transition={{ duration: 0.2, ease: 'easeInOut', delay: 0.02 * i }} className="inline-block">
+            <h3 className="text-2xl font-bold text-black">
+              {testimonials[active].name}
+            </h3>
+            <p className="text-sm text-gray-500">
+              {testimonials[active].designation}
+            </p>
+            <motion.p className="mt-8 text-base text-gray-500">
+              {testimonials[active].quote.split(" ").map((word, index) => (
+                <motion.span
+                  key={index}
+                  initial={{
+                    filter: "blur(10px)",
+                    opacity: 0,
+                    y: 5,
+                  }}
+                  animate={{
+                    filter: "blur(0px)",
+                    opacity: 1,
+                    y: 0,
+                  }}
+                  transition={{
+                    duration: 0.2,
+                    ease: "easeInOut",
+                    delay: 0.02 * index,
+                  }}
+                  className="inline-block"
+                >
                   {word}&nbsp;
                 </motion.span>
               ))}
             </motion.p>
           </motion.div>
 
-          <div className="flex gap-4 pt-12 md:pt-0">
-            <button onClick={prev} className="h-7 w-7 rounded-full bg-muted flex items-center justify-center hover:bg-muted/70 transition">
-              <ChevronLeft className="h-5 w-5 text-black" />
+          <div className="flex gap-4">
+            <button
+              onClick={handlePrev}
+              className="group/button flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-muted active:scale-95 transition-all"
+              name="Previous"
+              title="Previous"
+            >
+              <IconArrowLeft className="h-5 w-5 text-black transition-transform duration-300 group-hover/button:rotate-12" />
             </button>
-            <button onClick={next} className="h-7 w-7 rounded-full bg-muted flex items-center justify-center hover:bg-muted/70 transition">
-              <ChevronRight className="h-5 w-5 text-black" />
+            <button
+              onClick={handleNext}
+              className="group/button flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-muted active:scale-95 transition-all"
+              name="Next"
+              title="Next"
+            >
+              <IconArrowRight className="h-5 w-5 text-black transition-transform duration-300 group-hover/button:-rotate-12" />
             </button>
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

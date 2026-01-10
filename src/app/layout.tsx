@@ -4,13 +4,14 @@ import "./globals.css";
 import LenisProvider from "@/providers/lenis";
 
 const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
+  variable: "--font-geist-sans",
   subsets: ["latin"],
 });
 
+
 export const metadata: Metadata = {
   title: "Next SaaS",
-  description: "Privacy-friendly analytics, made simple.",
+  description: "Change this"
 };
 
 export default function RootLayout({
@@ -20,7 +21,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${dmSans.variable} font-[family-name:var(--font-dm-sans)] antialiased w-full min-h-screen overflow-x-hidden`}>
+      <body
+        className={`${dmSans.className} antialiased w-full min-h-screen overflow-x-hidden`}
+      >
         <LenisProvider>
           {children}
         </LenisProvider>
