@@ -10,17 +10,17 @@ const dmSans = DM_Sans({
 
 
 export const metadata: Metadata = {
-  title: "Pirsch — Privacy-First Web Analytics",
+  title: "HexLab — Privacy-First Web Analytics",
   description: "Privacy-friendly web analytics made and hosted in Europe — powerful, cookie-free, and fully compliant with GDPR, CCPA, and PECR.",
   keywords: ["web analytics", "privacy", "GDPR", "cookie-free", "Google Analytics alternative"],
   openGraph: {
-    title: "Pirsch — Privacy-First Web Analytics",
+    title: "HexLab — Privacy-First Web Analytics",
     description: "Privacy-friendly web analytics made and hosted in Europe — powerful, cookie-free, and fully compliant with GDPR, CCPA, and PECR.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Pirsch — Privacy-First Web Analytics",
+    title: "HexLab — Privacy-First Web Analytics",
     description: "Privacy-friendly web analytics made and hosted in Europe — powerful, cookie-free, and fully compliant with GDPR, CCPA, and PECR.",
   },
 };
