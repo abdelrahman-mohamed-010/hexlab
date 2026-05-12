@@ -1,13 +1,13 @@
-import CTA from "@/sections/cta"
-import FAQ from "@/sections/faq"
-import Features1 from "@/sections/features-1"
-import Features2 from "@/sections/features-2"
-import Features3 from "@/sections/features-3"
-import Features4 from "@/sections/features-4"
-import Footer from "@/sections/footer"
-import Hero from "@/sections/hero"
-import Pricing from "@/sections/pricing"
-import Testimonials from "@/sections/testimonials"
+import CTA from "@/sections/cta";
+import FAQ from "@/sections/faq";
+import Features1 from "@/sections/features-1";
+import Features2 from "@/sections/features-2";
+import Features3 from "@/sections/features-3";
+import Features4 from "@/sections/features-4";
+import Footer from "@/sections/footer";
+import Hero from "@/sections/hero";
+import Pricing from "@/sections/pricing";
+import Testimonials from "@/sections/testimonials";
 
 export default function HomePage() {
   return (

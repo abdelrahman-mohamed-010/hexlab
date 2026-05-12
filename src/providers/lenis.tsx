@@ -1,7 +1,7 @@
 'use client'
 
 import BlurEffect from '@/components/blur-effect'
-import FollowCursor from '@/components/follow-cursor'
+import FollowCursor from '@/components/followCursor'
 import { ReactLenis } from 'lenis/react'
 import { LazyMotion, domAnimation } from "motion/react"
 

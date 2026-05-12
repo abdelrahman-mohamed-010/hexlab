@@ -1,5 +1,6 @@
 'use client'
 
+import Logo from "./logo"
 import Link from "next/link"
 import { Button } from "./ui/button"
 import { AlignJustify, X } from "lucide-react"
@@ -7,54 +8,65 @@ import { AnimatePresence } from 'motion/react'
 import * as motion from "motion/react-m"
 import { useState } from "react"
 
-const navLinks = [
-  { name: 'home', href: '/' },
-  { name: 'features', href: '#features' },
-  { name: 'pricing', href: '#pricing' },
-  { name: 'testimonials', href: '#testimonials' },
-  { name: 'FAQ', href: '#faq' },
-]
-
-const cta = { content: 'try it for free', href: '/' }
+const settings = {
+  navLinks: [
+    { name: 'home', href: '/' },
+    { name: 'features', href: '#features' },
+    { name: 'pricing', href: '#pricing' },
+    { name: 'testimonials', href: '#testimonials' },
+    { name: 'FAQ', href: '#faq' },
+  ],
+  cta: {
+    content: 'try it for free',
+    href: '/'
+  }
+}
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen)
+  }
 
   return (
     <nav className="w-full h-fit py-4 flex items-center justify-between">
       {/* Logo */}
-      <Link href="/" title="Home" className="text-black font-semibold text-xl tracking-tight">
-        nextsaas
+      <Link href='/' title="Home" id="Logo">
+        <Logo />
       </Link>
 
-      {/* Desktop */}
+      {/* desktop menu */}
       <div className="items-center justify-center gap-5 hidden md:flex">
+
+        {/* Nav Links */}
         <ul className="flex items-center justify-center gap-5 text-black font-medium select-none text-link">
-          {navLinks.map(link => (
+          {settings.navLinks.map(link => (
             <li key={link.name}>
-              <Link href={link.href} className="hover:opacity-80 transition-all capitalize">
-                {link.name}
-              </Link>
+              <Link href={link.href} title={link.name} className="hover:opacity-80 transition-all capitalize">{link.name}</Link>
             </li>
           ))}
         </ul>
-        <Link href={cta.href}>
-          <Button className="capitalize">{cta.content}</Button>
+
+        {/* Call To Action */}
+        <Link href={settings.cta.href} title={settings.cta.content}>
+          <Button className="capitalize">{settings.cta.content}</Button>
         </Link>
       </div>
 
-      {/* Mobile burger */}
+      {/* mobile only - burger menu icon */}
       <motion.div
         initial={{ scale: 1, y: 0 }}
         whileTap={{ scale: 0.8 }}
         transition={{ duration: 0.3 }}
         className="bg-white shadow-none flex md:hidden cursor-pointer text-black"
-        onClick={() => setIsOpen(o => !o)}
+        onClick={toggleMenu}
       >
-        {isOpen ? <X size={20} /> : <AlignJustify size={20} />}
+        {!isOpen && <AlignJustify size={20} />}
+        {isOpen && <X size={20} />}
       </motion.div>
 
-      {/* Mobile menu */}
+      {/* mobile only - menu container with AnimatePresence for exit animations */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -66,16 +78,15 @@ export default function Navbar() {
           >
             <div className="flex flex-col p-6 space-y-6">
               <ul className="flex flex-col space-y-2 text-black font-medium select-none text-base">
-                {navLinks.map(link => (
+                {settings.navLinks.map(link => (
                   <li key={link.name}>
-                    <Link href={link.href} onClick={() => setIsOpen(false)} className="block py-2 capitalize">
-                      {link.name}
-                    </Link>
+                    <Link href={link.href} title={link.name} onClick={toggleMenu} className="block py-2 capitalize">{link.name}</Link>
                   </li>
                 ))}
               </ul>
-              <Link href={cta.href} onClick={() => setIsOpen(false)}>
-                <Button className="w-full capitalize">{cta.content}</Button>
+
+              <Link href={settings.cta.href} title={settings.cta.content} onClick={toggleMenu}>
+                <Button className="w-full capitalize">{settings.cta.content}</Button>
               </Link>
             </div>
           </motion.div>
